@@ -8,13 +8,13 @@ export const signUp = async (req, res) => {
         const { fullName, username, password, confirmPassword, gender } = req.body
 
         if (password !== confirmPassword) {
-            return res.status(400).json({ error: "Password don't match!" })
+            res.status(400).json({ error: "Password don't match!" })
         }
 
         const user = await User.findOne({ username })
 
         if (user) {
-            return res.status(400).json({ error: "Username already exist" })
+            res.status(400).json({ error: "Username already exist" })
         }
 
         // HASH PASSWORD HERE
@@ -38,18 +38,18 @@ export const signUp = async (req, res) => {
             generateTokenAndSetCookie(newUser._id, res)
             await newUser.save()
 
-            return res.status(201).json({
+            res.status(201).json({
                 _id: newUser._id,
                 fullName: newUser.fullName,
                 username: newUser.username,
                 profilePic: newUser.profilePic
             })
         } else {
-            return res.status(400).json("Invalid user data!")
+            res.status(400).json("Invalid user data!")
         }
     } catch (error) {
         console.log("Error in Signup controller", error.message)
-        return res.status(500).json({ error: "Internal server error" })
+        res.status(500).json({ error: "Internal server error" })
     }
 
 }
@@ -74,7 +74,7 @@ export const login = async (req, res) => {
         })
     } catch (error) {
         console.log("Error in Login controller", error.message)
-        return res.status(500).json({ error: "Internal server error" })
+        res.status(500).json({ error: "Internal server error" })
     }
 }
 
@@ -84,7 +84,7 @@ export const logout = async (req, res) => {
         res.status(200).json({ message: "Logged out successfully" })
     } catch (error) {
         console.log("Error in Logout controller", error.message)
-        return res.status(500).json({ error: "Internal server error" })
+        res.status(500).json({ error: "Internal server error" })
     }
     console.log("logoutUser")
 }
